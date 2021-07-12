@@ -97,9 +97,21 @@ function edit(req, res) {
       carsModel
         .findByIdAndUpdate(req.params.id, req.body)
         .then((r) => {
-          res.json(r);
+          if (req.body.dealership) {
+            deleteCarDearlership(r._id)
+              .then(() =>
+                newCarDealership(req.body.dealership, r._id)
+                  .then((response) => {
+                    res.json(r);
+                  })
+                  .catch((err) => console.log(err))
+              )
+              .catch((err) => console.log(err));
+          } else {
+            res.json(r);
+          }
         })
-        .catch((err) => res.status(404).send("Car not found"));
+        .catch((err) => res.send(err.message));
     }
   } else {
     res.status(403).send("You don't have authorization");
