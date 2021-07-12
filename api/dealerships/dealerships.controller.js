@@ -1,12 +1,24 @@
 const dealershipsModel = require("./dealerships.model");
 const mongoose = require("mongoose");
 
-module.exports = { getAll, getById, remove, edit, create, newCarDealership };
+module.exports = {
+  getAll,
+  getById,
+  remove,
+  edit,
+  create,
+  newCarDealership,
+  deleteCarDearlership,
+};
 
 function newCarDealership(dealershipId, carId) {
   return dealershipsModel.findByIdAndUpdate(dealershipId, {
     $push: { cars: carId },
   });
+}
+
+function deleteCarDearlership(id) {
+  return dealershipsModel.updateOne({ cars: id }, { $pull: { cars: id } });
 }
 
 function getAll(req, res) {

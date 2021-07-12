@@ -1,7 +1,10 @@
 const carsModel = require("./cars.model");
 const mongoose = require("mongoose");
 const { deleteCarsUser } = require("../users/users.controller");
-const { newCarDealership } = require("../dealerships/dealerships.controller");
+const {
+  newCarDealership,
+  deleteCarDearlership,
+} = require("../dealerships/dealerships.controller");
 module.exports = { getAll, getById, remove, create, edit };
 
 function getAll(req, res) {
@@ -33,7 +36,12 @@ function remove(req, res) {
         .findByIdAndDelete(req.params.id)
         .then((r) => {
           deleteCarsUser(req.params.id)
-            .then(() => res.send("succesfully remove"))
+            .then(() => {
+              deleteCarDearlership(req.params.id)
+                .then(() => res.send("succesfully remove"))
+                .catch((err) => console.log(err));
+            })
+
             .catch((err) => res.send("An error has ocurred"));
         })
         .catch((err) => res.status(404).send(err));
