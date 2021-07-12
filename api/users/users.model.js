@@ -31,10 +31,7 @@ const usersSchema = mongoose.Schema({
     type: String,
     required: [true, "password required"],
   },
-  favouriteCars: {
-    //end in future
-    type: String,
-  },
+  favouriteCars: [{ type: mongoose.Schema.Types.ObjectId, ref: "car" }],
 });
 
 const user = mongoose.model("user", usersSchema);
