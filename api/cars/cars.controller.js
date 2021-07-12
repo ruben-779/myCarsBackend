@@ -1,4 +1,5 @@
 const carsModel = require("./cars.model");
+const dealershipsModel = require("../dealerships/dealerships.model");
 const mongoose = require("mongoose");
 const { deleteCarsUser } = require("../users/users.controller");
 const {
@@ -58,21 +59,31 @@ function create(req, res) {
     var newCar = new carsModel(req.body);
     var error = newCar.validateSync();
     if (!error) {
-      carsModel
-        .create({
-          brand: newCar.brand,
-          model: newCar.model,
-          colour: newCar.colour,
-          dealership: newCar.dealership,
+      //check if the dealership exists
+      dealershipsModel
+        .findById(req.body.dealership)
+        .then((d) => {
+          if (d) {
+            carsModel
+              .create({
+                brand: newCar.brand,
+                model: newCar.model,
+                colour: newCar.colour,
+                dealership: newCar.dealership,
+              })
+              .then((r) => {
+                newCarDealership(newCar.dealership, r._id)
+                  .then((respose) => {
+                    res.send("succesfully create");
+                  })
+                  .catch((err) => console.log(err));
+              })
+              .catch((err) => console.log(err));
+          } else {
+            res.send("dealership not found");
+          }
         })
-        .then((r) => {
-          newCarDealership(newCar.dealership, r._id)
-            .then((respose) => {
-              res.send("succesfully create");
-            })
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => console.log(err));
+        .catch((err) => res.send("An error has ocurred"));
     } else {
       if (error.errors.model) {
         res.status(400).send("invalid model");
