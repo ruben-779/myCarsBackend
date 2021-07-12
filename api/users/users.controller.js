@@ -11,7 +11,7 @@ module.exports = {
 };
 
 function deleteCarsUser(id) {
-  return userModel.updateMany(
+  return usersModel.updateMany(
     { favouriteCars: id },
     { $pull: { favouriteCars: id } }
   );
