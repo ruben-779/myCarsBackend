@@ -7,7 +7,15 @@ module.exports = {
   editSelf,
   deleteSelf,
   remove,
+  deleteCarsUser,
 };
+
+function deleteCarsUser(id) {
+  return userModel.updateMany(
+    { favouriteCars: id },
+    { $pull: { favouriteCars: id } }
+  );
+}
 
 function getAll(req, res) {
   usersModel

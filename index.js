@@ -26,7 +26,7 @@ const routerAuth = require("./auth/auth.router");
 
 app.use("/users", routerUsers);
 app.use("/cars", routerCars);
-// app.use("/dealerships", routerDealerships);
+app.use("/dealerships", routerDealerships);
 app.use("/", routerAuth);
 
 //listen port

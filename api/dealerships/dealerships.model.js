@@ -22,6 +22,7 @@ const dealershipsSchema = mongoose.Schema({
       required: [true, "zipcode required"],
     },
   },
+  cars: [{ type: mongoose.Schema.Types.ObjectId, ref: "car" }],
 });
 
 const dealership = mongoose.model("dealership", dealershipsSchema);

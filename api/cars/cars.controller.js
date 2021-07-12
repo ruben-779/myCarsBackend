@@ -1,6 +1,6 @@
 const carsModel = require("./cars.model");
 const mongoose = require("mongoose");
-const car = require("./cars.model");
+const { deleteCarsUser } = require("../users/users.controller");
 
 module.exports = { getAll, getById, remove, create, edit };
 
@@ -32,9 +32,11 @@ function remove(req, res) {
       carsModel
         .findByIdAndDelete(req.params.id)
         .then((r) => {
-          res.send("succesfully remove");
+          deleteCarsUser(req.params.id)
+            .then(() => res.send("succesfully remove"))
+            .catch((err) => res.send("An error has ocurred"));
         })
-        .catch((err) => res.status(404).send("Car not found"));
+        .catch((err) => res.status(404).send(err));
     } else {
       res.status(404).send("Car not found");
     }
