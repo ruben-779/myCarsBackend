@@ -23,7 +23,7 @@ function register(req, res) {
         if (err.keyValue.email) {
           res.status(400).send("repeated email");
         } else {
-          res.send(err);
+          res.status(500).send(err);
         }
       });
   } else {
@@ -33,6 +33,8 @@ function register(req, res) {
       res.status(400).send("invalid name");
     } else if (error.errors.password) {
       res.status(400).send("required password");
+    } else if (error.errors.favouriteCars) {
+      res.status(400).send("Invalid favourite car");
     }
   }
 }

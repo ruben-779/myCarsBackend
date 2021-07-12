@@ -23,7 +23,7 @@ function getById(req, res) {
   let userId = mongoose.Types.ObjectId.isValid(req.params.id);
 
   if (userId) {
-    userModel
+    usersModel
       .findById(req.params.id)
       .populate("favouriteCars")
       .then((r) => res.json(r))
@@ -56,7 +56,7 @@ function deleteSelf(req, res) {
       .findById(req.params.id)
       .then((r) => {
         if (r.email === req.currentUser.email) {
-          userModel
+          usersModel
             .findByIdAndDelete(req.params.id)
             .then((r) => res.send("successfully removed"));
         } else {
@@ -76,7 +76,7 @@ function editSelf(req, res) {
       .findById(req.params.id)
       .then((r) => {
         if (r.email === req.currentUser.email) {
-          userModel
+          usersModel
             .findByIdAndUpdate(req.params.id, req.body)
             .then((r) => res.send(r));
         } else {
