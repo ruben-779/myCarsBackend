@@ -32,6 +32,7 @@ const usersSchema = mongoose.Schema({
     required: [true, "password required"],
   },
   favouriteCars: {
+    //end in future
     type: String,
   },
 });
