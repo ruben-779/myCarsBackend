@@ -1,7 +1,7 @@
 const carsModel = require("./cars.model");
 const mongoose = require("mongoose");
 const { deleteCarsUser } = require("../users/users.controller");
-
+const { newCarDealership } = require("../dealerships/dealerships.controller");
 module.exports = { getAll, getById, remove, create, edit };
 
 function getAll(req, res) {
@@ -57,8 +57,14 @@ function create(req, res) {
           colour: newCar.colour,
           dealership: newCar.dealership,
         })
-        .then((r) => res.send("succesfully create"))
-        .catch((err) => res.send("An error has ocurred"));
+        .then((r) => {
+          newCarDealership(newCar.dealership, r._id)
+            .then((respose) => {
+              res.send("succesfully create");
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
     } else {
       if (error.errors.model) {
         res.status(400).send("invalid model");

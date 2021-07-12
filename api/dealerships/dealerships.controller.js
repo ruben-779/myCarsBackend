@@ -1,7 +1,13 @@
 const dealershipsModel = require("./dealerships.model");
 const mongoose = require("mongoose");
 
-module.exports = { getAll, getById, remove, edit, create };
+module.exports = { getAll, getById, remove, edit, create, newCarDealership };
+
+function newCarDealership(dealershipId, carId) {
+  return dealershipsModel.findByIdAndUpdate(dealershipId, {
+    $push: { cars: carId },
+  });
+}
 
 function getAll(req, res) {
   dealershipsModel
@@ -58,7 +64,7 @@ function create(req, res) {
         .then((r) => res.send("succesfully create"))
         .catch((err) => res.send("An error has ocurred"));
     } else {
-      console.log(error);
+      res.status(400).send(error.errors);
     }
   } else {
     res.status(403).send("you don't have authorization");
