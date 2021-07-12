@@ -25,13 +25,11 @@ const carsSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  dealership: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "dealership",
-      required: [true, "dealership require"],
-    },
-  ],
+  dealership: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "dealership",
+    required: [true, "dealership require"],
+  },
 });
 
 const car = mongoose.model("car", carsSchema);
