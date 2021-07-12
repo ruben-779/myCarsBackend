@@ -21,10 +21,17 @@ const carsSchema = mongoose.Schema({
     maxLength: [60, "colour too long"],
     required: [true, "colour required"],
   },
-  dealership: {
-    //end in future
-    type: String,
+  sold: {
+    type: Boolean,
+    default: false,
   },
+  dealership: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "dealership",
+      required: [true, "dealership require"],
+    },
+  ],
 });
 
 const car = mongoose.model("car", carsSchema);
