@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+require("dotenv").config();
 
 //fix cors
 const cors = require("cors");
@@ -10,7 +11,7 @@ app.use(express.json());
 
 //to connect to mongodb
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/appCars", {
+mongoose.connect(process.env.MONGO_URL, {
   // deprecation warnong
   useNewUrlParser: true,
   useUnifiedTopology: true,

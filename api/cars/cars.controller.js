@@ -120,17 +120,25 @@ function edit(req, res) {
         .then((r) => {
           if (r) {
             if (req.body.dealership) {
-              deleteCarDearlership(r._id)
-                .then(() =>
-                  newCarDealership(req.body.dealership, r._id)
-                    .then((response) => {
-                      res.json(r);
-                    })
-                    .catch((err) => console.log(err))
-                )
-                .catch((err) => console.log(err));
+              dealershipsModel.findById(req.body.dealership).then((d) => {
+                if (d) {
+                  deleteCarDearlership(r._id)
+                    .then(() =>
+                      newCarDealership(req.body.dealership, r._id)
+                        .then((response) => {
+                          res.json("Succesfully changed");
+                        })
+                        .catch((err) =>
+                          res.status(500).send("An error has ocurred")
+                        )
+                    )
+                    .catch((err) => console.log(err));
+                } else {
+                  res.status(404).send("Dealership not found");
+                }
+              });
             } else {
-              res.json(r);
+              res.json("Succesfully changed");
             }
           } else {
             res.status(404).send("Car not found");

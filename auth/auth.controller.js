@@ -51,7 +51,7 @@ function login(req, res) {
       } else {
         const token = jwt.sign(
           { email: r.email, role: r.role, id: r._id },
-          "SECRET"
+          process.env.TOKEN_PASSWORD
         );
         return res.json({
           user: r,

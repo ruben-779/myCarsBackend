@@ -14,7 +14,7 @@ function validAuth(req, res, next) {
     return res.status(403).send("you don't have authorization");
   }
   const token = req.headers.authorization;
-  jwt.verify(token, "SECRET", (err, data) => {
+  jwt.verify(token, process.env.TOKEN_PASSWORD, (err, data) => {
     if (err) {
       return res.status(403).send("Invalid token");
     } else {
