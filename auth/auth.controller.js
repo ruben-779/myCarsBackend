@@ -16,7 +16,6 @@ function register(req, res) {
         email: newUser.email,
         password: passwordHash,
         role: newUser.role,
-        favouriteCars: newUser.favouriteCars,
       })
       .then((r) => res.send(r))
       .catch((err) => {
@@ -33,8 +32,6 @@ function register(req, res) {
       res.status(400).send("invalid name");
     } else if (error.errors.password) {
       res.status(400).send("required password");
-    } else if (error.errors.favouriteCars) {
-      res.status(400).send("Invalid favourite car");
     }
   }
 }

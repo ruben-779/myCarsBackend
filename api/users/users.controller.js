@@ -35,7 +35,13 @@ function getById(req, res) {
     usersModel
       .findById(req.params.id)
       .populate("favouriteCars")
-      .then((r) => res.json(r))
+      .then((r) => {
+        if (r) {
+          res.json(r);
+        } else {
+          res.status(404).send("User not found");
+        }
+      })
       .catch((err) => res.status(500).json("An error has occurred"));
   } else {
     res.status(404).send("User not found");
@@ -48,7 +54,13 @@ function remove(req, res) {
     if (userId) {
       usersModel
         .findByIdAndDelete(req.params.id)
-        .then((r) => res.json(r))
+        .then((r) => {
+          if (r) {
+            res.json("Succesfully remove");
+          } else {
+            res.status(404).send("User not found");
+          }
+        })
         .catch((err) => res.status(500).json("An error has ocurred"));
     } else {
       res.status(404).send("User not found");
@@ -67,7 +79,7 @@ function deleteSelf(req, res) {
         if (r.email === req.currentUser.email) {
           usersModel
             .findByIdAndDelete(req.params.id)
-            .then((r) => res.send("successfully removed"));
+            .then((response) => res.send("successfully removed"));
         } else {
           res.status(403).send("you don't have authorization");
         }
@@ -104,7 +116,13 @@ function verify(req, res) {
     if (userId) {
       usersModel
         .findByIdAndUpdate(req.params.id, { verify: req.body.verify })
-        .then((r) => res.send(r))
+        .then((r) => {
+          if (r) {
+            res.send("Succesfully verify");
+          } else {
+            res.status(404).send("User not found");
+          }
+        })
         .catch((err) => res.status(500).send("An error has ocurred"));
     } else {
       res.status(400).send("Invalid ID");

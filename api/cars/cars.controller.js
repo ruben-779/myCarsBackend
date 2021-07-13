@@ -22,8 +22,14 @@ function getById(req, res) {
     carsModel
       .findById(req.params.id)
       .populate("dealership")
-      .then((r) => res.json(r))
-      .catch((err) => res.status(404).send("Car not found"));
+      .then((r) => {
+        if (r) {
+          res.json(r);
+        } else {
+          res.status(404).send("Car not found");
+        }
+      })
+      .catch((err) => res.status(500).send("An error has ocurred"));
   } else {
     res.status(404).send("Car not found");
   }
@@ -36,16 +42,20 @@ function remove(req, res) {
       carsModel
         .findByIdAndDelete(req.params.id)
         .then((r) => {
-          deleteCarsUser(req.params.id)
-            .then(() => {
-              deleteCarDearlership(req.params.id)
-                .then(() => res.send("succesfully remove"))
-                .catch((err) => console.log(err));
-            })
+          if (r) {
+            deleteCarsUser(req.params.id)
+              .then(() => {
+                deleteCarDearlership(req.params.id)
+                  .then(() => res.send("succesfully remove"))
+                  .catch((err) => res.send("An error has ocurred"));
+              })
 
-            .catch((err) => res.send("An error has ocurred"));
+              .catch((err) => res.send("An error has ocurred"));
+          } else {
+            res.status(404).send("Car not found");
+          }
         })
-        .catch((err) => res.status(404).send(err));
+        .catch((err) => res.status(500).send("An error has ocurred"));
     } else {
       res.status(404).send("Car not found");
     }
@@ -76,7 +86,7 @@ function create(req, res) {
                   .then((respose) => {
                     res.send("succesfully create");
                   })
-                  .catch((err) => console.log(err));
+                  .catch((err) => res.status(500).send("An error has ocurred"));
               })
               .catch((err) => console.log(err));
           } else {
@@ -108,18 +118,22 @@ function edit(req, res) {
       carsModel
         .findByIdAndUpdate(req.params.id, req.body)
         .then((r) => {
-          if (req.body.dealership) {
-            deleteCarDearlership(r._id)
-              .then(() =>
-                newCarDealership(req.body.dealership, r._id)
-                  .then((response) => {
-                    res.json(r);
-                  })
-                  .catch((err) => console.log(err))
-              )
-              .catch((err) => console.log(err));
+          if (r) {
+            if (req.body.dealership) {
+              deleteCarDearlership(r._id)
+                .then(() =>
+                  newCarDealership(req.body.dealership, r._id)
+                    .then((response) => {
+                      res.json(r);
+                    })
+                    .catch((err) => console.log(err))
+                )
+                .catch((err) => console.log(err));
+            } else {
+              res.json(r);
+            }
           } else {
-            res.json(r);
+            res.status(404).send("Car not found");
           }
         })
         .catch((err) => res.send(err.message));

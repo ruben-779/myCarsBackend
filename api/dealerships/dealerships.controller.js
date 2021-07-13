@@ -36,8 +36,13 @@ function getById(req, res) {
       .findById(req.params.id)
       .populate("cars")
       .then((r) => {
-        res.json(r);
-      });
+        if (r) {
+          res.json(r);
+        } else {
+          res.status(404).send("Dealership not found");
+        }
+      })
+      .catch((err) => res.status(500).send("An error has ocurred"));
   }
 }
 function remove(req, res) {
@@ -47,9 +52,13 @@ function remove(req, res) {
       dealershipsModel
         .findByIdAndDelete(req.params.id)
         .then((r) => {
-          res.send("succesfully remove");
+          if (r) {
+            res.send("succesfully remove");
+          } else {
+            res.status(404).send("Dealership not found");
+          }
         })
-        .catch((err) => res.status(404).send(err));
+        .catch((err) => res.status(500).send("An error has ocurred"));
     } else {
       res.status(404).send("dealership not found");
     }
@@ -89,9 +98,13 @@ function edit(req, res) {
       dealershipsModel
         .findByIdAndUpdate(req.params.id, req.body)
         .then((r) => {
-          res.json(r);
+          if (r) {
+            res.json("Succesfully changed");
+          } else {
+            res.status(404).send("Dealershipp not found");
+          }
         })
-        .catch((err) => res.status(404).send("dealership not found"));
+        .catch((err) => res.status(500).send("An error has ocurred"));
     }
   } else {
     res.status(403).send("You don't have authorization");
