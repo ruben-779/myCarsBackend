@@ -10,7 +10,7 @@ const options = {
 };
 
 // email sender function
-exports.sendEmail = function (subject, name, id, safeWord) {
+exports.sendEmailVerify = function (subject, name, id, safeWord) {
   axios
     .get("http://localhost:3000/users", options)
     .then((r) => {

@@ -6,6 +6,8 @@ const {
   newCarDealership,
   deleteCarDearlership,
 } = require("../dealerships/dealerships.controller");
+const { sendEmailCar } = require("../../services/nodemailer/newCarMailing");
+
 module.exports = { getAll, getById, remove, create, edit };
 
 function getAll(req, res) {
@@ -84,6 +86,12 @@ function create(req, res) {
               .then((r) => {
                 newCarDealership(newCar.dealership, r._id)
                   .then((respose) => {
+                    sendEmailCar(
+                      "New car available",
+                      newCar.model,
+                      newCar.brand,
+                      newCar.colour
+                    );
                     res.send("succesfully create");
                   })
                   .catch((err) => res.status(500).send("An error has ocurred"));

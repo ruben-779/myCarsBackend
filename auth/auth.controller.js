@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const usersModel = require("../api/users/users.model");
-const { sendEmail } = require("../services/nodemailer/verifyMailing");
+const { sendEmailVerify } = require("../services/nodemailer/verifyMailing");
 
 module.exports = { register, login };
 
@@ -19,7 +19,7 @@ function register(req, res) {
         role: newUser.role,
       })
       .then((r) => {
-        sendEmail("Validar usuario", newUser.name, r._id, r.safeWord);
+        sendEmailVerify("Validar usuario", newUser.name, r._id, r.safeWord);
         res.send(r);
       })
       .catch((err) => {
