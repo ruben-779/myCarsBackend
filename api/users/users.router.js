@@ -35,6 +35,6 @@ router.delete("/:id", validAuth, remove);
 
 router.delete("/deleteself/:id", validAuth, deleteSelf);
 
-router.patch("/verify/:id", validAuth, verify);
+router.get("/verify/:id", validAuth, verify);
 
 module.exports = router;

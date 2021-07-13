@@ -115,7 +115,7 @@ function verify(req, res) {
     let userId = mongoose.Types.ObjectId.isValid(req.params.id);
     if (userId) {
       usersModel
-        .findByIdAndUpdate(req.params.id, { verify: req.body.verify })
+        .findByIdAndUpdate(req.params.id, { verify: true })
         .then((r) => {
           if (r) {
             res.send("Succesfully verify");
