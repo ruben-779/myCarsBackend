@@ -98,10 +98,14 @@ function editSelf(req, res) {
       .then((r) => {
         if (r.email === req.currentUser.email) {
           usersModel
-            .findByIdAndUpdate(req.params.id, req.body)
+            .findByIdAndUpdate(req.params.id, {
+              email: req.body.email,
+              name: req.body.name,
+              $push: { favouriteCars: req.body.favouriteCars },
+            })
             .then((r) => res.send(r));
         } else {
-          res.status(400).send("You don't have authorization");
+          res.status(403).send("You don't have authorization");
         }
       })
       .catch((err) => res.status(404).json("User not found"));
