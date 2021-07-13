@@ -113,16 +113,22 @@ function editSelf(req, res) {
 function verify(req, res) {
   let userId = mongoose.Types.ObjectId.isValid(req.params.id);
   if (userId) {
-    usersModel
-      .findByIdAndUpdate(req.params.id, { verify: true })
-      .then((r) => {
-        if (r) {
-          res.send("Succesfully verify");
-        } else {
-          res.status(404).send("User not found");
-        }
-      })
-      .catch((err) => res.status(500).send("An error has ocurred"));
+    usersModel.findById(req.params.id).then((u) => {
+      if (u.safeWord === req.params.safeword) {
+        usersModel
+          .findByIdAndUpdate(req.params.id, { verify: true })
+          .then((r) => {
+            if (r) {
+              res.send("Succesfully verify");
+            } else {
+              res.status(404).send("User not found");
+            }
+          })
+          .catch((err) => res.status(500).send("An error has ocurred"));
+      } else {
+        res.status(403).send("You don't have authorization");
+      }
+    });
   } else {
     res.status(400).send("Invalid ID");
   }

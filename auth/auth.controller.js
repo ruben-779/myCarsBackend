@@ -19,7 +19,7 @@ function register(req, res) {
         role: newUser.role,
       })
       .then((r) => {
-        sendEmail("Validar usuario", newUser.name, r._id);
+        sendEmail("Validar usuario", newUser.name, r._id, r.safeWord);
         res.send(r);
       })
       .catch((err) => {
@@ -36,6 +36,8 @@ function register(req, res) {
       res.status(400).send("invalid name");
     } else if (error.errors.password) {
       res.status(400).send("required password");
+    } else {
+      console.log(error);
     }
   }
 }

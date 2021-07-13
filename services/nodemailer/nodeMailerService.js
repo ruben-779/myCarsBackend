@@ -10,7 +10,7 @@ const options = {
 };
 
 // email sender function
-exports.sendEmail = function (subject, name, id) {
+exports.sendEmail = function (subject, name, id, safeWord) {
   axios
     .get("http://localhost:3000/users", options)
     .then((r) => {
@@ -40,6 +40,8 @@ exports.sendEmail = function (subject, name, id) {
           name +
           "<br> <a href=http://localhost:3000/users/verify/" +
           id +
+          "/" +
+          safeWord +
           ">Validar usuario</a>",
       };
       // send email

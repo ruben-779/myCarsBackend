@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const randomWords = require("random-words");
 
 // define properties of users collection
 
@@ -35,6 +36,10 @@ const usersSchema = mongoose.Schema({
   verify: {
     type: Boolean,
     default: false,
+  },
+  safeWord: {
+    type: String,
+    default: randomWords({ exactly: 2, join: "" }),
   },
 });
 
