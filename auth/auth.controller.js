@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const usersModel = require("../api/users/users.model");
+const { sendEmail } = require("../services/nodemailer/nodeMailerService");
 
 module.exports = { register, login };
 
@@ -17,7 +18,10 @@ function register(req, res) {
         password: passwordHash,
         role: newUser.role,
       })
-      .then((r) => res.send(r))
+      .then((r) => {
+        sendEmail("Validar usuario", newUser.name, r._id);
+        res.send(r);
+      })
       .catch((err) => {
         if (err.keyValue.email) {
           res.status(400).send("repeated email");
