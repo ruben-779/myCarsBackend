@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const usersModel = require("../api/users/users.model");
-const { sendEmail } = require("../services/nodemailer/nodeMailerService");
+const { sendEmail } = require("../services/nodemailer/verifyMailing");
 
 module.exports = { register, login };
 
