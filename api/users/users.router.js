@@ -7,6 +7,7 @@ const {
   editSelf,
   remove,
   deleteSelf,
+  verify,
 } = require("./users.controller");
 
 function validAuth(req, res, next) {
@@ -33,5 +34,7 @@ router.patch("/:id", validAuth, editSelf);
 router.delete("/:id", validAuth, remove);
 
 router.delete("/deleteself/:id", validAuth, deleteSelf);
+
+router.patch("/verify/:id", validAuth, verify);
 
 module.exports = router;

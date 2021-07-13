@@ -14,7 +14,7 @@ const usersSchema = mongoose.Schema({
     //email validator
     validate: {
       validator: function (v) {
-        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+        return /^\w+([\.-]?\w+)*@domingoalonsogroup.com/.test(v);
       },
       message: "Invalid email",
     },
@@ -32,6 +32,10 @@ const usersSchema = mongoose.Schema({
     required: [true, "password required"],
   },
   favouriteCars: [{ type: mongoose.Schema.Types.ObjectId, ref: "car" }],
+  verify: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const user = mongoose.model("user", usersSchema);

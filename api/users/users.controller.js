@@ -8,6 +8,7 @@ module.exports = {
   deleteSelf,
   remove,
   deleteCarsUser,
+  verify,
 };
 
 function deleteCarsUser(id) {
@@ -94,5 +95,21 @@ function editSelf(req, res) {
       .catch((err) => res.status(404).json("User not found"));
   } else {
     res.status(404).send("User not found");
+  }
+}
+
+function verify(req, res) {
+  if (req.currentUser.role === "admin") {
+    let userId = mongoose.Types.ObjectId.isValid(req.params.id);
+    if (userId) {
+      usersModel
+        .findByIdAndUpdate(req.params.id, { verify: req.body.verify })
+        .then((r) => res.send(r))
+        .catch((err) => res.status(500).send("An error has ocurred"));
+    } else {
+      res.status(400).send("Invalid ID");
+    }
+  } else {
+    res.status(403).send("You don't have authorization");
   }
 }
