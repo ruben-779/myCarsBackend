@@ -10,6 +10,7 @@ const { sendEmailCar } = require("../../services/nodemailer/newCarMailing");
 
 module.exports = { getAll, getById, remove, create, edit };
 
+//find all cars
 function getAll(req, res) {
   carsModel
     .find()
@@ -18,6 +19,7 @@ function getAll(req, res) {
     .catch((err) => res.status(500).json(err));
 }
 
+//find by id
 function getById(req, res) {
   let carId = mongoose.Types.ObjectId.isValid(req.params.id);
   if (carId) {
@@ -36,8 +38,9 @@ function getById(req, res) {
     res.status(404).send("Car not found");
   }
 }
-
+//delete car
 function remove(req, res) {
+  //Check if current user is admin
   if (req.currentUser.role === "admin") {
     let carId = mongoose.Types.ObjectId.isValid(req.params.id);
     if (carId) {
@@ -45,6 +48,7 @@ function remove(req, res) {
         .findByIdAndDelete(req.params.id)
         .then((r) => {
           if (r) {
+            //call the functions to remove the car in the other tables
             deleteCarsUser(req.params.id)
               .then(() => {
                 deleteCarDearlership(req.params.id)
@@ -67,6 +71,7 @@ function remove(req, res) {
 }
 
 function create(req, res) {
+  //Check if current user is admin
   if (req.currentUser.role === "admin") {
     var newCar = new carsModel(req.body);
     var error = newCar.validateSync();
@@ -84,6 +89,7 @@ function create(req, res) {
                 dealership: newCar.dealership,
               })
               .then((r) => {
+                //call the function to update the dealerships
                 newCarDealership(newCar.dealership, r._id)
                   .then((respose) => {
                     sendEmailCar(
@@ -120,6 +126,7 @@ function create(req, res) {
   }
 }
 function edit(req, res) {
+  //Check if current user is admin
   if (req.currentUser.role === "admin") {
     let carId = mongoose.Types.ObjectId.isValid(req.params.id);
     if (carId) {
@@ -127,6 +134,7 @@ function edit(req, res) {
         .findByIdAndUpdate(req.params.id, req.body)
         .then((r) => {
           if (r) {
+            //if the car changes dealership, it is removed in one and added in another
             if (req.body.dealership) {
               dealershipsModel.findById(req.body.dealership).then((d) => {
                 if (d) {

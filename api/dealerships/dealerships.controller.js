@@ -10,17 +10,20 @@ module.exports = {
   newCarDealership,
   deleteCarDearlership,
 };
-
+//function to add new cars in their dealership
 function newCarDealership(dealershipId, carId) {
+  //push the car in their dealership
   return dealershipsModel.findByIdAndUpdate(dealershipId, {
     $push: { cars: carId },
   });
 }
-
+//function to delete in dealership a car that has been deleted
 function deleteCarDearlership(id) {
+  //pull the car that has the car id removed
   return dealershipsModel.updateOne({ cars: id }, { $pull: { cars: id } });
 }
 
+//find all dealerships
 function getAll(req, res) {
   dealershipsModel
     .find()
@@ -29,7 +32,9 @@ function getAll(req, res) {
     .catch((err) => res.status(500).send("An error has ocurred"));
 }
 
+//Find by id
 function getById(req, res) {
+  //check that the id is valid
   let dealershipId = mongoose.Types.ObjectId.isValid(req.params.id);
   if (dealershipId) {
     dealershipsModel
@@ -45,7 +50,10 @@ function getById(req, res) {
       .catch((err) => res.status(500).send("An error has ocurred"));
   }
 }
+
+//delete dealehrship
 function remove(req, res) {
+  //Check if current user is admin
   if (req.currentUser.role === "admin") {
     let dealershipId = mongoose.Types.ObjectId.isValid(req.params.id);
     if (dealershipId) {
@@ -67,7 +75,9 @@ function remove(req, res) {
   }
 }
 
+//create dealership
 function create(req, res) {
+  //Check if current user is admin
   if (req.currentUser.role === "admin") {
     let newDealership = new dealershipsModel(req.body);
     let error = newDealership.validateSync();
@@ -91,7 +101,10 @@ function create(req, res) {
     res.status(403).send("you don't have authorization");
   }
 }
+
+//Edit dealership
 function edit(req, res) {
+  //Check if current user is admin
   if (req.currentUser.role === "admin") {
     let dealershipId = mongoose.Types.ObjectId.isValid(req.params.id);
     if (dealershipId) {
