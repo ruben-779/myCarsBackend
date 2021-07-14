@@ -11,13 +11,15 @@ module.exports = {
   verify,
 };
 
+//function to delete in users a car that has been deleted
 function deleteCarsUser(id) {
+  //pull the car that has the car id removed
   return usersModel.updateMany(
     { favouriteCars: id },
     { $pull: { favouriteCars: id } }
   );
 }
-
+//find all users
 function getAll(req, res) {
   usersModel
     .find()
@@ -25,12 +27,13 @@ function getAll(req, res) {
     .then((r) => {
       res.json(r);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => res.status(500).send("An error has ocucurred"));
 }
 
+//Find by id
 function getById(req, res) {
+  //check that the id is valid
   let userId = mongoose.Types.ObjectId.isValid(req.params.id);
-
   if (userId) {
     usersModel
       .findById(req.params.id)
@@ -47,8 +50,9 @@ function getById(req, res) {
     res.status(404).send("User not found");
   }
 }
-
+//delete user
 function remove(req, res) {
+  //Check if current user is admin
   if (req.currentUser.role === "admin") {
     let userId = mongoose.Types.ObjectId.isValid(req.params.id);
     if (userId) {
@@ -69,13 +73,15 @@ function remove(req, res) {
     res.status(403).send("you are not admin");
   }
 }
-
+// delete self user
 function deleteSelf(req, res) {
+  //check that the id is valid
   let userId = mongoose.Types.ObjectId.isValid(req.params.id);
   if (userId) {
     usersModel
       .findById(req.params.id)
       .then((r) => {
+        // check that the emails are the same
         if (r.email === req.currentUser.email) {
           usersModel
             .findByIdAndDelete(req.params.id)
@@ -90,12 +96,15 @@ function deleteSelf(req, res) {
   }
 }
 
+//editself user
 function editSelf(req, res) {
+  //check that the id is valid
   let userId = mongoose.Types.ObjectId.isValid(req.params.id);
   if (userId) {
     usersModel
       .findById(req.params.id)
       .then((r) => {
+        // check that the emails are the same
         if (r.email === req.currentUser.email) {
           usersModel
             .findByIdAndUpdate(req.params.id, {
@@ -114,11 +123,15 @@ function editSelf(req, res) {
   }
 }
 
+//verify users
 function verify(req, res) {
+  //check that the id is valid
   let userId = mongoose.Types.ObjectId.isValid(req.params.id);
   if (userId) {
     usersModel.findById(req.params.id).then((u) => {
+      // check that the safeWord are the same
       if (u.safeWord === req.params.safeword) {
+        //auto verify if everything is correct
         usersModel
           .findByIdAndUpdate(req.params.id, { verify: true })
           .then((r) => {

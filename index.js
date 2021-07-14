@@ -13,7 +13,7 @@ app.use(express.json());
 //to connect to mongodb
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGO_URL, {
-  // deprecation warnong
+  // deprecation warning
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
