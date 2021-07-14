@@ -23,8 +23,8 @@ exports.sendEmailCar = function (subject, model, brand, colour) {
       let transporter = nodemailer.createTransport({
         service: "Gmail",
         auth: {
-          user: "carappbs@gmail.com",
-          pass: "prueba1234",
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_PASS,
         },
       });
       // Defined email
