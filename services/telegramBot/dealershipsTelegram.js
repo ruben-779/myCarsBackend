@@ -15,13 +15,13 @@ const bot = new TelegramBot(token, { polling: true });
 
 exports.telegramBot = bot.onText(/^\/dealerships/, function (msg) {
   axios
-    .get("http://localhost:3000/dealerships", options)
+    .get(process.env.API_URL + "dealerships", options)
     .then((d) => {
       d.data.forEach((d) => {
         d.cars.forEach((c) => {
           cars += c.brand + " " + c.model + " " + c.colour + "; ";
         });
-        dealerships += "\n-" + d.name + "\n  " + cars + "\n ";
+        dealerships += "\n-" + d.name + ":\n  " + cars + "\n ";
         cars = "";
       });
 

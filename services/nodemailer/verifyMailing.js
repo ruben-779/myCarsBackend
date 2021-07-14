@@ -12,7 +12,7 @@ const options = {
 // email sender function
 exports.sendEmailVerify = function (subject, name, id, safeWord) {
   axios
-    .get("http://localhost:3000/users", options)
+    .get(process.env.API_URL + "users", options)
     .then((r) => {
       r.data.forEach((r) => {
         if (r.role === "admin") {
