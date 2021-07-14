@@ -1,11 +1,12 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const { telegramBot } = require("./services/telegramBot/dealershipsTelegram");
 
 //fix cors
 const cors = require("cors");
 app.use(cors());
-
+telegramBot;
 //recognize that it will receive a json
 app.use(express.json());
 
